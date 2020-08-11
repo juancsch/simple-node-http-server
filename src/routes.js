@@ -1,9 +1,5 @@
-const {
-	sampleRequest,
-	testRequest,
-	invalidRequest,
-	serverError
-} = require('./handlers')
+const { sampleRequest } = require('./handlers/sampleRequest')
+const { testRequest } = require('./handlers/testRequest')
 
 const routes = [{
 		method: 'GET',
@@ -16,20 +12,8 @@ const routes = [{
 	}
 ]
 
-module.exports = function Routes (req, res) {
-	try {
-		const route = routes.find(byPathnameAndMethodIn(req))
-		if (route) {
-			console.log(`Request type ${req.method}, endpoint ${req.url}`)
-			return route.handler(req, res)
-		}
-
-		console.log(`Request type ${req.method}, invalid endpoint ${req.url}`)
-		invalidRequest(req, res)
-	} catch (err) {
-		console.log('Error: ', err)
-		serverError(err, res)
-	}
+exports.routeFor = function (request) {
+	return routes.find(byPathnameAndMethodIn(request))
 }
 
 function byPathnameAndMethodIn (request) {
