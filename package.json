@@ -1,0 +1,29 @@
+{
+  "name": "simple-http-server",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">= 12.10.0"
+  },
+  "scripts": {
+    "start": "PORT_SERVER=3000 node src/server"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint-plugin-jsdoc": "^30.2.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.2.5",
+    "jest": "^26.3.0",
+    "jest-extended": "^0.11.5",
+    "jest-junit": "^11.1.0",
+    "prettier": "^2.0.5",
+    "standard": "^14.3.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm t"
+    }
+  }
+}

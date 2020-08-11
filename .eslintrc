@@ -1,0 +1,20 @@
+{
+  "extends": "standard",
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "plugins": [
+	"prettier",
+	"jsdoc"
+  ],
+  "rules": {
+	"semi": "error",
+    "indent": "off",
+    "no-tabs": "off",
+    "padded-blocks": "off",
+    "operator-linebreak": "off",
+    "no-magic-numbers": ["warn", { "ignore": [0, 1] }],
+    "prefer-promise-reject-errors": "error"
+  }
+}
