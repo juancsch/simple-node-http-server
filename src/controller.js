@@ -1,27 +1,42 @@
+// @ts-check
+
+const { IncomingMessage, ServerResponse } = require('http')
 const { routeFor } = require('./routes')
 
-module.exports = function Controller (req, res) {
+/**
+ * @param {IncomingMessage} req
+ * @param {ServerResponse} res
+ * @returns {void}
+ */
+exports.controller = function (req, res) {
 	try {
 		const route = routeFor(req)
 		if (route) {
 			console.log(`Request type ${req.method}, endpoint ${req.url}`)
-			return route.handler(req, res)
+			route.handler(req, res)
+			return
 		}
-
-		console.log(`Request type ${req.method}, invalid endpoint ${req.url}`)
-		invalidRequest(req, res)
+		console.error(`Request type ${req.method}, invalid endpoint ${req.url}`)
+		notFound(res)
 	} catch (err) {
-		console.log('Error: ', err)
+		console.error('Internal server error due to', err)
 		serverError(err, res)
 	}
 }
 
-function invalidRequest (req, res) {
+/**
+ * @param {ServerResponse} res
+ */
+function notFound (res) {
 	res.statusCode = 404
 	res.setHeader('Content-Type', 'text/plain')
 	res.end('Invalid Request')
 }
 
+/**
+ * @param {Error} err
+ * @param {ServerResponse} res
+ */
 function serverError (err, res) {
 	res.statusCode = 500
 	res.setHeader('Content-Type', 'text/plain')

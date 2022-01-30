@@ -1,6 +1,12 @@
+// @ts-check
 
-exports.testRequest = function testRequest (req, res) {
+const { IncomingMessage, ServerResponse } = require('http')
 
+/**
+ * @param {IncomingMessage} req
+ * @param {ServerResponse} res
+ */
+exports.testRequest = function (req, res) {
 	let body = ''
 
 	req.on('data', function (chunk) {
@@ -8,10 +14,11 @@ exports.testRequest = function testRequest (req, res) {
 	})
 
 	req.on('end', function () {
+		console.log(body)
 		const postBody = JSON.parse(body)
 
 		const response = {
-			text: 'Post Request Value is  ' + postBody.value
+			text: 'Post Request Value is [' + postBody.value + ']'
 		}
 
 		res.statusCode = 200
