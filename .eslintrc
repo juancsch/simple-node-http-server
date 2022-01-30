@@ -1,15 +1,19 @@
 {
-  "extends": "standard",
   "env": {
     "node": true,
     "jest": true
   },
   "plugins": [
-	"prettier",
-	"jsdoc"
+	  "jsdoc"
+  ],
+  "extends": [
+	  "standard",
+	  "plugin:jsdoc/recommended"
   ],
   "rules": {
-	"semi": "error",
+	"jsdoc/require-param-description": "off",
+	"jsdoc/require-returns-description": "off",
+	"jsdoc/require-property-description": "off",
     "indent": "off",
     "no-tabs": "off",
     "padded-blocks": "off",
