@@ -2,11 +2,17 @@
 
 const { IncomingMessage, ServerResponse } = require('http')
 
+module.exports = {
+	method: 'POST',
+	pathname: '/test',
+	handler
+}
+
 /**
  * @param {IncomingMessage} req
  * @param {ServerResponse} res
  */
-exports.testRequest = function (req, res) {
+function handler (req, res) {
 	let body = ''
 
 	req.on('data', function (chunk) {

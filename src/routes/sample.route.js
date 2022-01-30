@@ -2,11 +2,17 @@
 
 const { IncomingMessage, ServerResponse } = require('http')
 
+module.exports = {
+	method: 'GET',
+	pathname: '/sample',
+	handler
+}
+
 /**
  * @param {IncomingMessage} req
  * @param {ServerResponse} res
  */
-exports.sampleRequest = function (req, res) {
+function handler (req, res) {
 	const urlParsed = new URL(req.url, `http://${req.headers.host}`)
 
 	const name = urlParsed.searchParams.get('name') || 'World!!'

@@ -2,8 +2,8 @@
 
 const { IncomingMessage, ServerResponse } = require('http')
 
-const { sampleRequest } = require('./handlers/sampleRequest')
-const { testRequest } = require('./handlers/testRequest')
+const testRoute = require('./test.route')
+const sampleRoute = require('./sample.route')
 
 /**
  * @typedef {object} Route
@@ -15,25 +15,17 @@ const { testRequest } = require('./handlers/testRequest')
 /**
  * @type {Array<Route>}
  */
-const router = [
-	{
-		method: 'GET',
-		pathname: '/sample',
-		handler: sampleRequest
-	},
-	{
-		method: 'POST',
-		pathname: '/test',
-		handler: testRequest
-	}
-]
+const routes = [testRoute, sampleRoute]
 
 /**
  * @param {IncomingMessage} request
- * @returns {Route}
+ * @returns {function(IncomingMessage, ServerResponse): void}
  */
-exports.routeFor = function (request) {
-	return router.find(byPathnameAndMethodIn(request))
+ exports.handlerFor = function (request) {
+	const route = routes.find(byPathnameAndMethodIn(request))
+	if (route) {
+		return route.handler
+	}
 }
 
 /**
