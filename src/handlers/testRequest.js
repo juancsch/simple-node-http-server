@@ -14,7 +14,7 @@ exports.testRequest = function (req, res) {
 	})
 
 	req.on('end', function () {
-		console.log(body)
+
 		const postBody = JSON.parse(body)
 
 		const response = {

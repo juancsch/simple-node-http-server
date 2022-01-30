@@ -2,6 +2,6 @@ module.exports = {
 	verbose: true,
     coverageDirectory: 'coverage',
 	testEnvironment: 'node',
-	moduleFileExtensions: ['js'],
-	testMatch: ['**/*.test.js']
+	testMatch: ['<rootDir>/**/*.test.js'],
+	reporters: ['default']
 }

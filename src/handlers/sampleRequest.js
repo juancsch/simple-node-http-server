@@ -9,7 +9,7 @@ const { IncomingMessage, ServerResponse } = require('http')
 exports.sampleRequest = function (req, res) {
 	const urlParsed = new URL(req.url, `http://${req.headers.host}`)
 
-	const name = urlParsed.searchParams.get('name') || 'World'
+	const name = urlParsed.searchParams.get('name') || 'World!!'
 
 	const response = {
 		text: 'Hello ' + name
