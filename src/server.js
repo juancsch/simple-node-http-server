@@ -1,12 +1,17 @@
 // @ts-check
 
-const { IncomingMessage, ServerResponse, createServer } = require('http')
+const { IncomingMessage, ServerResponse, Server, createServer } = require('http')
 const { handlerFor } = require('./routes')
 
-exports.Server = function () {
-	return createServer(controller)
+/**
+ * @param {object} options
+ * @returns {Server}
+ */
+exports.Server = function (options) {
+	return createServer(options, controller)
 }
 
+// @type import('http').RequestListener
 /**
  * @param {IncomingMessage} req
  * @param {ServerResponse} res

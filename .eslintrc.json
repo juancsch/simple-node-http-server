@@ -1,0 +1,37 @@
+{
+	"env": {
+		"node": true,
+		"jest": true
+	},
+	"plugins": [
+		"jsdoc"
+	],
+	"extends": [
+		"standard",
+		"plugin:jsdoc/recommended"
+	],
+	"rules": {
+		"jsdoc/require-param-description": "off",
+		"jsdoc/require-returns-description": "off",
+		"jsdoc/require-property-description": "off",
+		"jsdoc/require-jsdoc": ["error", {
+			"require": {
+				"FunctionDeclaration": true,
+				"FunctionExpression": true,
+				"ClassDeclaration": true,
+				"ClassExpression": true,
+				"MethodDefinition": true,
+				"ArrowFunctionExpression": true
+			}
+		}],
+		"indent": "off",
+		"no-tabs": "off",
+		"padded-blocks": "off",
+		"operator-linebreak": "off",
+		"no-magic-numbers": ["warn", {
+				"ignore": [0, 1]
+			}
+		],
+		"prefer-promise-reject-errors": "error"
+	}
+}
