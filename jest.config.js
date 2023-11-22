@@ -1,6 +1,5 @@
-module.exports = {
+export default {
 	verbose: true,
-    coverageDirectory: 'coverage',
 	testEnvironment: 'node',
 	testMatch: ['<rootDir>/**/*.test.js'],
 	reporters: ['default']

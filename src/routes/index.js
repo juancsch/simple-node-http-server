@@ -1,9 +1,7 @@
-// @ts-check
+import { IncomingMessage, ServerResponse } from 'http'
 
-const { IncomingMessage, ServerResponse } = require('http')
-
-const testRoute = require('./test.route')
-const sampleRoute = require('./sample.route')
+import sampleRoute from './sample.route.js'
+import greetingsRoute from './greetings.route.js'
 
 /**
  * @typedef {object} Route
@@ -15,25 +13,22 @@ const sampleRoute = require('./sample.route')
 /**
  * @type {Array<Route>}
  */
-const routes = [testRoute, sampleRoute]
+const routes = [sampleRoute, greetingsRoute]
 
 /**
  * @param {IncomingMessage} request
- * @returns {function(IncomingMessage, ServerResponse): void}
+ * @returns {function(IncomingMessage, ServerResponse): void | undefined}
  */
- exports.handlerFor = function (request) {
+export function handlerFor (request) {
 	const route = routes.find(byPathnameAndMethodIn(request))
-	if (route) {
-		return route.handler
-	}
+	return route?.handler ?? undefined
 }
 
 /**
- *
  * @param {IncomingMessage} request
  * @returns {function(Route): boolean}
  */
 function byPathnameAndMethodIn (request) {
-	const url = new URL(request.url, `http://${request.headers.host}`)
-	return route => url.pathname === route.pathname && request.method === route.method
+	const urlParsed = new URL(request.url, `http://${request.headers.host}`)
+	return route => urlParsed.pathname === route.pathname && request.method === route.method
 }

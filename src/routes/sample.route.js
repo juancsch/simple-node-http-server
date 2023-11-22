@@ -1,9 +1,10 @@
-// @ts-check
+import { IncomingMessage, ServerResponse } from 'http'
 
-const { IncomingMessage, ServerResponse } = require('http')
-
-module.exports = {
-	method: 'GET',
+/**
+ * @type {import('./index.js').Route}
+ */
+export default {
+	method: 'POST',
 	pathname: '/sample',
 	handler
 }
@@ -13,15 +14,22 @@ module.exports = {
  * @param {ServerResponse} res
  */
 function handler (req, res) {
-	const urlParsed = new URL(req.url, `http://${req.headers.host}`)
+	let body = ''
 
-	const name = urlParsed.searchParams.get('name') || 'World!!'
+	req.on('data', function (chunk) {
+		body += chunk
+	})
 
-	const response = {
-		text: 'Hello ' + name
-	}
+	req.on('end', function () {
 
-	res.statusCode = 200
-	res.setHeader('Content-Type', 'application/json')
-	res.end(JSON.stringify(response))
+		const postBody = JSON.parse(body)
+
+		const response = {
+			text: 'Post Request Value is [' + postBody.value + ']'
+		}
+
+		res.statusCode = 200
+		res.setHeader('Content-Type', 'application/json')
+		res.end(JSON.stringify(response))
+	})
 }

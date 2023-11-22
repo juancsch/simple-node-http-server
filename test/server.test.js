@@ -1,40 +1,40 @@
-const request = require('supertest')
-
-const { Server } = require('../src/server')
+/* eslint-disable no-magic-numbers */
+import request from 'supertest'
+import { WebServer } from '../src/server.js'
 
 describe('GET /api', () => {
 
-	it.skip('should return 500', async () => {
+	test.skip('should return 500', async () => {
 
-		await request(Server())
+		await request(WebServer())
 			.get('/')
 			.expect('Content-Type', 'text/plain')
-			.expect(500, /Server() error/) // eslint-disable-line
+			.expect(500, /WebServer() error/)
 	})
 
-	it('should return 404', async () => {
+	test('should return 404', async () => {
 
-		await request(Server())
+		await request(WebServer())
 			.get('/no_exist')
 			.expect('Content-Type', 'text/plain')
-			.expect(404, 'Invalid Request') // eslint-disable-line
+			.expect(404, 'Invalid Request')
 	})
 
-	it('should return 200 and test', async () => {
+	test('should return 200 and test', async () => {
 
-		await request(Server())
-			.post('/test')
+		await request(WebServer())
+			.post('/sample')
 			.send({ value: 'john' })
 			.set('Accept', 'application/json')
 			.expect('Content-Type', 'application/json')
-			.expect(200, { text: 'Post Request Value is [john]' }) // eslint-disable-line
+			.expect(200, { text: 'Post Request Value is [john]' })
 	})
 
-	it('should return 200 and sample', async () => {
+	test('should return 200 and greetings', async () => {
 
-		await request(Server())
-			.get('/sample')
+		await request(WebServer())
+			.get('/greetings?name=juanc')
 			.expect('Content-Type', 'application/json')
-			.expect(200, { text: 'Hello World!!' }) // eslint-disable-line
+			.expect(200, { text: 'Hello juanc!!' })
 	})
 })
