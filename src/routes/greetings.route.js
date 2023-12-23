@@ -10,19 +10,20 @@ export default {
 }
 
 /**
- * @param {IncomingMessage} req
- * @param {ServerResponse} res
+ * @param {IncomingMessage} request
+ * @param {ServerResponse} response
  */
-function handler (req, res) {
-	const urlParsed = new URL(req.url, `http://${req.headers.host}`)
+function handler (request, response) {
 
+	const urlParsed = new URL(request.url, `http://${request.headers.host}`)
 	const name = urlParsed.searchParams.get('name') ?? 'World'
 
-	const response = {
+	const responseBody = {
 		text: 'Hello ' + name + '!!'
 	}
-
-	res.statusCode = 200
-	res.setHeader('Content-Type', 'application/json')
-	res.end(JSON.stringify(response))
+	response
+		.writeHead(200, {
+			'Content-Type': 'application/json'
+		})
+		.end(JSON.stringify(responseBody))
 }

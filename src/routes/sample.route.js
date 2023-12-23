@@ -10,26 +10,25 @@ export default {
 }
 
 /**
- * @param {IncomingMessage} req
- * @param {ServerResponse} res
+ * @param {IncomingMessage} request
+ * @param {ServerResponse} response
  */
-function handler (req, res) {
-	let body = ''
+function handler (request, response) {
 
-	req.on('data', function (chunk) {
-		body += chunk
-	})
-
-	req.on('end', function () {
-
-		const postBody = JSON.parse(body)
-
-		const response = {
-			text: 'Post Request Value is [' + postBody.value + ']'
-		}
-
-		res.statusCode = 200
-		res.setHeader('Content-Type', 'application/json')
-		res.end(JSON.stringify(response))
-	})
+	let requestData = ''
+	request
+		.on('data', function (chunk) {
+			requestData += chunk
+		})
+		.on('end', function () {
+			const requestBody = JSON.parse(requestData)
+			const responseBody = {
+				text: 'Post Request Value is [' + requestBody.value + ']'
+			}
+			response
+				.writeHead(200, {
+					'Content-Type': 'application/json'
+				})
+				.end(JSON.stringify(responseBody))
+		})
 }

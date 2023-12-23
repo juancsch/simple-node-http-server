@@ -17,21 +17,22 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {
-    "@types/jest": "29.5.10",
-    "@types/node": "20.9.4",
-    "eslint": "8.54.0",
+    "@types/jest": "29.5.11",
+    "@types/node": "20.10.5",
+    "@types/supertest": "6.0.0",
+    "eslint": "8.56.0",
     "eslint-config-standard": "17.1.0",
-    "eslint-plugin-import": "2.29.0",
-    "eslint-plugin-jsdoc": "46.9.0",
-    "eslint-plugin-n": "16.3.1",
+    "eslint-plugin-import": "2.29.1",
+    "eslint-plugin-jsdoc": "46.9.1",
+    "eslint-plugin-n": "16.5.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "6.1.1",
     "husky": "4.2.5",
     "jest": "29.7.0",
     "jest-extended": "4.0.2",
-    "lint-staged": "15.1.0",
+    "lint-staged": "15.2.0",
     "supertest": "6.3.3",
-    "vitest": "^0.34.6"
+    "vitest": "1.1.0"
   },
   "husky": {
     "hooks": {
@@ -39,6 +40,6 @@
     }
   },
   "lint-staged": {
-    "{src,test}/**/*.js": "npm run lint:fix"
+    "{src,test}/**/*.js": "eslint --fix"
   }
 }

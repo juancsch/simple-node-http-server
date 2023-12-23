@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import request from 'supertest'
 import { WebServer } from '../src/server.js'
 
@@ -9,7 +8,19 @@ describe('GET /api', () => {
 		await request(WebServer())
 			.get('/')
 			.expect('Content-Type', 'text/plain')
-			.expect(500, /WebServer() error/)
+			.expect(500, /Internal server error/)
+	})
+
+	test('should return 204', async () => {
+
+		await request(WebServer())
+			.options('/')
+			.set('Access-Control-Request-Method', 'GET')
+			.set('Origin', 'localhost')
+			.expect('Access-Control-Allow-Origin', 'localhost')
+			.expect('Access-Control-Allow-Methods', 'GET')
+			.expect('Access-Control-Allow-Headers', 'Content-Type,Content-Length')
+			.expect(204)
 	})
 
 	test('should return 404', async () => {
@@ -17,7 +28,7 @@ describe('GET /api', () => {
 		await request(WebServer())
 			.get('/no_exist')
 			.expect('Content-Type', 'text/plain')
-			.expect(404, 'Invalid Request')
+			.expect(404, /Not found/)
 	})
 
 	test('should return 200 and test', async () => {

@@ -29,6 +29,6 @@ export function handlerFor (request) {
  * @returns {function(Route): boolean}
  */
 function byPathnameAndMethodIn (request) {
-	const urlParsed = new URL(request.url, `http://${request.headers.host}`)
-	return route => urlParsed.pathname === route.pathname && request.method === route.method
+	const { pathname } = new URL(request.url, `http://${request.headers.host}`)
+	return route => pathname === route.pathname && request.method === route.method
 }

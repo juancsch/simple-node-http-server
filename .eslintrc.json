@@ -7,8 +7,8 @@
 		"jsdoc"
 	],
 	"extends": [
-		"standard",
-		"plugin:jsdoc/recommended"
+		"plugin:jsdoc/recommended",
+		"standard"
 	],
 	"rules": {
 		"jsdoc/require-param-description": "off",
@@ -29,7 +29,7 @@
 		"padded-blocks": "off",
 		"operator-linebreak": "off",
 		"no-magic-numbers": ["warn", {
-				"ignore": [0, 1]
+				"ignore": [0, 1, 200, 204, 404, 405, 500]
 			}
 		],
 		"prefer-promise-reject-errors": "error"

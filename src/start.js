@@ -1,12 +1,27 @@
 import { WebServer } from './server.js'
 
-const hostname = '127.0.0.1'
 const port = process.env.PORT_SERVER || '3000'
 
-WebServer({})
-	.listen(Number(port), hostname, () => {
-		console.log(`Server running at http://${hostname}:${port}/`)
-	})
-	.on('error', err => {
-		console.error('Cath error during initalization server:', err)
-	})
+process.on('SIGINT', () => {
+	webServer.close(() => {	console.log('Server closed') })
+})
+
+const webServer = WebServer({})
+	.on('error', handleServerError)
+	.on('listening', handleServerListening)
+	.listen(Number(port), 'localhost')
+
+/**
+ *
+ */
+function handleServerListening () {
+	console.log(`Server running at http://localhost:${port}/`)
+}
+
+/**
+ *
+ * @param {Error} error
+ */
+function handleServerError (error) {
+	console.error('Cath error during initalization server:', error)
+}
