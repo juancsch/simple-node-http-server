@@ -7,39 +7,66 @@ import { ServerErrorHandler } from './handlers/ErrorHandler.js'
 import { NotFoundHandler } from './handlers/NotFoundHandler.js'
 
 /**
- * @param {object} config
+ * @param {{ port?: number }} config
  * @param {{ info, error, warn }} log
- * @returns {any}
+ * @returns {{ start: () => Promise<void>, stop: () => Promise<void> }}
  */
-export function WebServer (config = {}, log = console) {
+export function WebServer ({ port = 3000 } = {}, log = console) {
 
-	const serverErrorHandler = ServerErrorHandler(log)
-	const notFoundHandler = NotFoundHandler(log)
+	 const server = createServer()
+		.on('request', frontController(log))
+		.on('error', (error) => {
+			log.error('Server error', error)
+		})
 
-	return createServer(frontController)
+	 return {
+		async start () {
+			await new Promise((resolve) => {
+				server.listen(port, () => {
+					console.log(`Server listening on port ${port}`)
+					resolve()
+				})
+			})
+		},
+		async stop () {
+			await new Promise((resolve, reject) => {
+				server.close((err) => {
+					if (err !== undefined) reject(err)
+					else resolve()
+				})
+			})
+		}
+	}
+
 
 	/**
-	 * @param {IncomingMessage} request
-	 * @param {ServerResponse} response
+ 	 * @param {{ info, error, warn }} log
+	 * @returns {(request: IncomingMessage, response: ServerResponse) => void}
 	 */
-	function frontController (request, response) {
-		try {
-			log.info(`Request [${request.method} - ${request.url}]`)
+	function frontController (log) {
 
-			if (isPreflight(request)) {
-				sendPreflightCORS(request, response)
-				return
-			}
-			enableCORS(request, response)
+		const serverErrorHandler = ServerErrorHandler(log)
+		const notFoundHandler = NotFoundHandler(log)
 
-			const requestHandler = handlerFor(request)
-			if (requestHandler !== undefined) {
-				requestHandler(request, response)
-			} else {
-				notFoundHandler(request, response)
+		return (request, response) => {
+			try {
+				log.info(`Request [${request.method} - ${request.url}]`)
+
+				if (isPreflight(request)) {
+					sendPreflightCORS(request, response)
+					return
+				}
+				enableCORS(request, response)
+
+				const requestHandler = handlerFor(request)
+				if (requestHandler !== undefined) {
+					requestHandler(request, response)
+				} else {
+					notFoundHandler(request, response)
+				}
+			} catch (error) {
+				serverErrorHandler(error, request, response)
 			}
-		} catch (error) {
-			serverErrorHandler(error, request, response)
 		}
 	}
 }

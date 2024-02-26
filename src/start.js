@@ -2,26 +2,16 @@ import { WebServer } from './server.js'
 
 const port = process.env.PORT_SERVER || '3000'
 
+const webServer = WebServer({ port: Number(port) })
+await webServer.start().catch(handleServerError)
+
 process.on('SIGINT', () => {
-	webServer.close(() => {	console.log('Server closed') })
+	webServer.stop().catch(handleServerError)
 })
 
-const webServer = WebServer({})
-	.on('error', handleServerError)
-	.on('listening', handleServerListening)
-	.listen(Number(port), 'localhost')
-
 /**
- *
- */
-function handleServerListening () {
-	console.log(`Server running at http://localhost:${port}/`)
-}
-
-/**
- *
  * @param {Error} error
  */
 function handleServerError (error) {
-	console.error('Cath error during initalization server:', error)
+	console.error('Cath error during start/stop server:', error)
 }

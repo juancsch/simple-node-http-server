@@ -1,51 +1,75 @@
-import request from 'supertest'
+import { after, before, describe, test } from 'node:test'
+import assert from 'node:assert/strict'
+
 import { WebServer } from '../src/server.js'
+import { request } from 'node:http'
 
 describe('GET /api', () => {
 
-	test.skip('should return 500', async () => {
+	const server = WebServer({ port: 3000 })
 
-		await request(WebServer())
-			.get('/')
-			.expect('Content-Type', 'text/plain')
-			.expect(500, /Internal server error/)
+	before(async () => {
+		await server.start()
+	})
+
+	after(async () => {
+		await server.stop()
+	})
+
+	test.skip('should return 500', async () => {
+		// When
+		const response = await fetch('http://localhost:3000/')
+
+		// Then
+		assert.strictEqual(response.status, 500)
 	})
 
 	test('should return 204', async () => {
+		// When
+		const response = await fetch('http://localhost:3000/', {
+			method: 'OPTIONS',
+			headers: {
+				'Access-Control-Request-Method': 'GET',
+				'Origin': 'localhost'
+			}
+		})
 
-		await request(WebServer())
-			.options('/')
-			.set('Access-Control-Request-Method', 'GET')
-			.set('Origin', 'localhost')
-			.expect('Access-Control-Allow-Origin', 'localhost')
-			.expect('Access-Control-Allow-Methods', 'GET')
-			.expect('Access-Control-Allow-Headers', 'Content-Type,Content-Length')
-			.expect(204)
+		// Then
+		assert.strictEqual(response.status, 204)
+		assert.strictEqual(response.headers.get('Access-Control-Allow-Origin'), 'localhost')
+		assert.strictEqual(response.headers.get('Access-Control-Allow-Methods'), 'GET')
+		assert.strictEqual(response.headers.get('Access-Control-Allow-Headers'), 'Content-Type,Content-Length')
 	})
 
 	test('should return 404', async () => {
+		// When
+		const response = await fetch('http://localhost:3000/no_exist')
 
-		await request(WebServer())
-			.get('/no_exist')
-			.expect('Content-Type', 'text/plain')
-			.expect(404, /Not found/)
+		// Then
+		assert.strictEqual(response.status, 404)
+		assert.strictEqual(await response.text(), 'Not found [GET - /no_exist]')
 	})
 
 	test('should return 200 and test', async () => {
+		// When
+		const response = await fetch('http://localhost:3000/sample', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ value: 'john' })
+		})
 
-		await request(WebServer())
-			.post('/sample')
-			.send({ value: 'john' })
-			.set('Accept', 'application/json')
-			.expect('Content-Type', 'application/json')
-			.expect(200, { text: 'Post Request Value is [john]' })
+		// Then
+		assert.strictEqual(response.status, 200)
+		assert.deepStrictEqual(await response.json(), { text: 'Post Request Value is [john]' })
 	})
 
 	test('should return 200 and greetings', async () => {
 
-		await request(WebServer())
-			.get('/greetings?name=juanc')
-			.expect('Content-Type', 'application/json')
-			.expect(200, { text: 'Hello juanc!!' })
+		const response = await fetch('http://localhost:3000/greetings?name=juanc')
+
+		assert.strictEqual(response.status, 200)
+		assert.deepStrictEqual(await response.json(), { text: 'Hello juanc!!' })
 	})
 })

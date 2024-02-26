@@ -4,13 +4,35 @@
 		"jest": true
 	},
 	"plugins": [
-		"jsdoc"
+		"jsdoc",
+		"import",
+		"simple-import-sort"
 	],
 	"extends": [
 		"plugin:jsdoc/recommended",
 		"standard"
 	],
 	"rules": {
+		"simple-import-sort/imports": [
+			"error", {
+				"groups": [
+					["^\\u0000"],
+					["^node:"],
+					["^(os|path|fs|url|events|http)$"],
+					["^@?\\w"],
+					["^"],
+					["^\\.\\./\\.\\./\\.\\./\\.\\./\\.\\./"],
+					["^\\.\\./\\.\\./\\.\\./\\.\\./"],
+					["^\\.\\./\\.\\./\\.\\./"],
+					["^\\.\\./\\.\\./"],
+					["^\\.\\./"],
+					["^\\./"]
+				]
+			}
+		],
+		"import/first": "error",
+		"import/no-duplicates": "error",
+		"import/newline-after-import": "error",
 		"jsdoc/require-param-description": "off",
 		"jsdoc/require-returns-description": "off",
 		"jsdoc/require-property-description": "off",
