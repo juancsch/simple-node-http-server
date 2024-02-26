@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http'
 
-import sampleRoute from './sample.route.js'
 import greetingsRoute from './greetings.route.js'
+import sampleRoute from './sample.route.js'
 
 /**
  * @typedef {object} Route

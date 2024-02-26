@@ -1,7 +1,6 @@
 {
 	"env": {
-		"node": true,
-		"jest": true
+		"node": true
 	},
 	"plugins": [
 		"jsdoc",
@@ -51,7 +50,7 @@
 		"padded-blocks": "off",
 		"operator-linebreak": "off",
 		"no-magic-numbers": ["warn", {
-				"ignore": [0, 1, 200, 204, 404, 405, 500]
+				"ignore": [0, 1, 200, 204, 404, 405, 500, 8080]
 			}
 		],
 		"prefer-promise-reject-errors": "error"

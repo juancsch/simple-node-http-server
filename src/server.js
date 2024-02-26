@@ -1,25 +1,27 @@
-/* eslint-disable no-magic-numbers */
-import { IncomingMessage, ServerResponse, createServer } from 'http'
+import { createServer, IncomingMessage, ServerResponse } from 'http'
 
-import { handlerFor } from './routes/index.js'
-import { isPreflight, sendPreflightCORS, enableCORS } from './handlers/CORSHandler.js'
+import { enableCORS, isPreflight, sendPreflightCORS } from './handlers/CORSHandler.js'
 import { ServerErrorHandler } from './handlers/ErrorHandler.js'
 import { NotFoundHandler } from './handlers/NotFoundHandler.js'
+import { handlerFor } from './routes/index.js'
 
 /**
  * @param {{ port?: number }} config
  * @param {{ info, error, warn }} log
  * @returns {{ start: () => Promise<void>, stop: () => Promise<void> }}
  */
-export function WebServer ({ port = 3000 } = {}, log = console) {
+export function WebServer ({ port = 8080 } = {}, log = console) {
 
-	 const server = createServer()
+	const server = createServer()
 		.on('request', frontController(log))
 		.on('error', (error) => {
 			log.error('Server error', error)
 		})
 
-	 return {
+	return {
+		/**
+		 *
+		 */
 		async start () {
 			await new Promise((resolve) => {
 				server.listen(port, () => {
@@ -28,6 +30,9 @@ export function WebServer ({ port = 3000 } = {}, log = console) {
 				})
 			})
 		},
+		/**
+		 *
+		 */
 		async stop () {
 			await new Promise((resolve, reject) => {
 				server.close((err) => {
@@ -38,9 +43,8 @@ export function WebServer ({ port = 3000 } = {}, log = console) {
 		}
 	}
 
-
 	/**
- 	 * @param {{ info, error, warn }} log
+	 * @param {{ info, error, warn }} log
 	 * @returns {(request: IncomingMessage, response: ServerResponse) => void}
 	 */
 	function frontController (log) {

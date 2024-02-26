@@ -1,8 +1,7 @@
-import { after, before, describe, test } from 'node:test'
 import assert from 'node:assert/strict'
+import { after, before, describe, test } from 'node:test'
 
 import { WebServer } from '../src/server.js'
-import { request } from 'node:http'
 
 describe('GET /api', () => {
 
@@ -30,7 +29,7 @@ describe('GET /api', () => {
 			method: 'OPTIONS',
 			headers: {
 				'Access-Control-Request-Method': 'GET',
-				'Origin': 'localhost'
+				Origin: 'localhost'
 			}
 		})
 
@@ -66,9 +65,10 @@ describe('GET /api', () => {
 	})
 
 	test('should return 200 and greetings', async () => {
-
+		// When
 		const response = await fetch('http://localhost:3000/greetings?name=juanc')
 
+		// Then
 		assert.strictEqual(response.status, 200)
 		assert.deepStrictEqual(await response.json(), { text: 'Hello juanc!!' })
 	})

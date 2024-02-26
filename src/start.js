@@ -1,6 +1,6 @@
 import { WebServer } from './server.js'
 
-const port = process.env.PORT_SERVER || '3000'
+const port = process.env.PORT_SERVER ?? '3000'
 
 const webServer = WebServer({ port: Number(port) })
 await webServer.start().catch(handleServerError)
