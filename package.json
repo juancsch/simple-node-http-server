@@ -10,7 +10,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test test",
-    "start": "PORT_SERVER=3000 node src/start",
+    "start": "PORT_SERVER=8080 node src/start",
     "lint": "eslint src test",
     "lint:fix": "npm run lint -- --fix"
   },
